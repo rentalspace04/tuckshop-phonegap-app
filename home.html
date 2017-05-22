@@ -4,17 +4,25 @@
         <meta charset="utf-8">
         <title>Tuckr</title>
         <link type="text/css" rel="stylesheet" href="/style/main.css" />
+        <link type="text/css" rel="stylesheet" href="/style/form.css" />
         <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
         <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16">
         <script src="/js/res/jquery-3.2.1.min.js"></script>
         <script src="/js/res/prototype.js"></script>
+        <script src="/js/common/classes.js"></script>
+        <script src="/js/pages/home.js"></script>
     </head>
     <body>
         <div id="contentBox">
             <h1>Tuckr</h1>
             <!-- PAGE CONTENT HERE -->
             <h2>My Tasks</h2>
+            <div class="taskList">
+                <a class="task button big" href="/order/index.html">Place Order</a>
+                <a class="task button big" href="/history.html">View History</a>
+                <a class="task button big" id="logoutButton">Log Out</a>
+            </div>
         </div>
     </body>
 </html>

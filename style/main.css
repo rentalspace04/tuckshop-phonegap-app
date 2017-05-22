@@ -22,6 +22,7 @@ html, body {
     background-color: #ffffff;
     font-size: 1.5em;
     font-family: "Raleway", sans-serif;
+    position: relative;
 }
 
 h1 {
@@ -48,4 +49,14 @@ form#loginForm div {
 }
 form#loginForm .button {
     margin-top: 30px;
+}
+
+.task {
+    background-color: #e9231e;
+    color: #fff;
+    min-width: 60%;
+    margin: 5% 20%;
+    text-align: center;
+    border-radius: 10px;
+    display: block;
 }
