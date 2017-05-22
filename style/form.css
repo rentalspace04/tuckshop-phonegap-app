@@ -1,0 +1,87 @@
+/* Form styles */
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 1.5em;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #e9231e;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0px 5px #999;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.button.disabled, .button.disabled:hover, .button.disabled:active {
+    background-color: #909090;
+    box-shadow: 0px 5px #999;
+    transform: none;
+    -ms-transform: none;
+    -webkit-transform: none;
+}
+
+.button.small {
+    font-size: 1em;
+    padding: 5px 8px;
+}
+
+.button:hover {
+    background-color: #ea312e;
+}
+
+.button:active {
+    background-color: #ea312e;
+    box-shadow: 0px 2px #666;
+    transform: translateY(3px);
+    -ms-transform: translateY(3px);
+    -webkit-transform: translateY(3px);
+}
+
+.textbox.error {
+    border-bottom: 4px solid red;
+}
+
+.textbox.error:focus, .textbox.error:active {
+    border-bottom: 2px solid red;
+}
+
+.textbox {
+    position: relative;
+    font-size: 1.5em;
+    font-family: "Raleway", sans-serif;
+    padding: 5px;
+    border: none;
+    background-color: #f6f6fa;
+    border-bottom: 1px solid #444;
+    border-radius: 4px 4px 0px 0px;
+    transition: border 0.2s;
+}
+
+.textbox.updated {
+    border-bottom: 2px solid #009900;
+    background-color: #b3ffb3;
+}
+
+.textbox:active, .textbox:focus {
+    border-bottom: 2px solid #222;
+    box-shadow: none;
+    outline: none;
+}
+
+#errorMessage, .errorMessage {
+    display: none;
+    width: 60%;
+    margin-left: 20%;
+    background-color: #f48d8b;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14pt;
+    font-style: italic;
+}
