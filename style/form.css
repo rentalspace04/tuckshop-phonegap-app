@@ -2,15 +2,15 @@
 .button {
     display: inline-block;
     padding: 10px 15px;
-    font-size: 0.8em;
+    font-size: 1em;
     text-align: center;
     text-decoration: none;
     outline: none;
     color: #fff;
     background-color: #e9231e;
     border: none;
-    border-radius: 15px;
-    box-shadow: 0px 10px #999;
+    border-radius: 8px;
+    box-shadow: 0px 5px #999;
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -28,12 +28,12 @@
 }
 
 .button.small {
-    font-size: .5em;
+    font-size: 1em;
     padding: 5px 8px;
 }
 
 .button.big {
-    font-size: 1em;
+    font-size: 1.5em;
     padding: 12px;
 }
 
@@ -43,10 +43,10 @@
 
 .button:active {
     background-color: #ea312e;
-    box-shadow: 0px 3px #666;
-    transform: translateY(7px);
-    -ms-transform: translateY(7px);
-    -webkit-transform: translateY(7px);
+    box-shadow: 0px 2px #666;
+    transform: translateY(3px);
+    -ms-transform: translateY(3px);
+    -webkit-transform: translateY(3px);
 }
 
 .textbox.error {
@@ -59,11 +59,11 @@
 
 .textbox {
     position: relative;
-    font-size: 0.8em;
+    font-size: 1em;
     font-family: "Raleway", sans-serif;
     padding: 5px;
     border: none;
-    background-color: #f6f6fa;
+    background-color: #f1f1f8;
     border-bottom: 1px solid #444;
     border-radius: 4px 4px 0px 0px;
     transition: border 0.2s;

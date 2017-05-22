@@ -9,7 +9,7 @@
             var s = new Storage();
             s.logIn(10, "asdonasidna");
             setTimeout(function(){
-                window.location.href = "/home.html";
+                window.location.href = "home.html";
             }, 1000);
         });
     });

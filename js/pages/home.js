@@ -4,7 +4,7 @@
             var s = new Storage();
             s.logOut();
             setTimeout(function(){
-                window.location.href = "/index.html";
+                window.location.href = "index.html";
             }, 1000);
         });
     });
