@@ -95,13 +95,34 @@ form#loginForm .button {
     width: 75px;
 }
 
+#categoryMenu .menu {
+    display: none;
+}
+
 #categoryMenu ul {
     list-style: none;
-    display: none;
+    margin: 0;
+    padding: 0px 40px 60px 80px;
+    display: block;
+    font-size: 2em;
+}
+
+#categoryMenu .menu a.navigation {
+    display: block;
+    text-decoration: none;
+    padding: 0px 40px 10px 80px;
+    color: #000;
+    font-size: 2em;
+}
+
+#categoryMenu .menu hr {
+    border: solid #555 2px;
+    margin: 15px 45px 10px 65px;
 }
 
 #categoryMenu ul li {
     opacity: 0;
+    padding-bottom: 5px;
 }
 
 #categoryMenu.open {
@@ -110,11 +131,8 @@ form#loginForm .button {
     opacity: 0.95;
 }
 
-#categoryMenu.open ul {
-    margin: 0;
-    padding: 0px 40px 60px 80px;
+#categoryMenu.open .menu {
     display: block;
-    font-size: 2em;
 }
 
 #categoryMenu.open li {
@@ -202,7 +220,7 @@ form#loginForm .button {
     vertical-align: middle;
 }
 
-table#cartView {
+table#cartView, table#historyView {
     width: 100%;
     text-align: center;
     padding: 20px 0;
