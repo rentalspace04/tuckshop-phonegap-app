@@ -62,14 +62,14 @@ var Item = Class.create({
     /*
     *    Puts a Menu Item section for this item into the menu list
     */
-    addAsMenuItem: function() {
+    asHTML: function() {
         var itemHTML = "<div class=\"menu-item\"\n>";
-        itemHTML += "<img src=\"" + this.image + "\" class=\"menu-item-thumb\" />\n";
+        itemHTML += "<img src=\"" + this.image + "\" />\n";
         itemHTML += "<table class=\"menu-item-content\">\n";
         itemHTML += "<tbody>\n<tr>\n<td>\n";
-        itemHTML += "<a href=\"/order/item.php?itemID=" + this.itemID + "\" class=\"menu-item-title\">" + this.name + "</a>\n";
+        itemHTML += this.name + "\n";
         itemHTML += "</td>\n<td>\n";
-        itemHTML += "<p class=\"menu-item-price\">\$" + this.price + "</p>\n";
+        itemHTML += "<p class=\"menu-item-price\">\$" + this.price.toFixed(2) + "</p>\n";
         itemHTML += "</td>\n</tr>\n<tr>\n<td>\n";
         itemHTML += "<p class=\"menu-item-desc\">" + this.desc +"</p>\n";
         itemHTML += "</td>\n<td>\n";
@@ -78,7 +78,7 @@ var Item = Class.create({
         itemHTML += "<input type=\"text\" class=\"menu-item-quantity-text\" disabled value=\"\" />\n";
         itemHTML += "<a class=\"menu-add-button\"><div>+</div></a>\n";
         itemHTML += "</div>\n</td>\n</tr>\n</tbody>\n</table>\n</div>\n";
-        jQuery("#menu-list").append(itemHTML);
+        return itemHTML;
     }
 });
 

@@ -10,7 +10,7 @@ html, body, table, tbody, tr, td, div, span, a, h1, h2, h3, h4, p {
 html, body {
     margin: 0;
     height: 100%;
-    background: url("img/food.png") repeat;
+    background: url("../img/food.png") repeat;
     background-color: #e9231e;
     position: relative;
 }
@@ -39,6 +39,12 @@ h2 {
     text-align: center;
 }
 
+h3 {
+    font-weight: normal;
+    font-size: 1.8em;
+    font-family: "Playfair Display", sans-serif;
+}
+
 form#loginForm {
     text-align: center;
     font-size: 1em;
@@ -59,4 +65,139 @@ form#loginForm .button {
     text-align: center;
     border-radius: 10px;
     display: block;
+}
+
+#categoryHeader {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#categoryHeader h3 {
+    display: inline;
+}
+
+#categoryHeader img {
+    width: 100px;
+}
+
+#categoryMenu {
+    background-color: #e0e0e0;
+    position: absolute;
+    top: 2%;
+    left: 4%;
+    border-radius: 15px;
+}
+
+#categoryMenu img {
+    width: 75px;
+}
+
+#categoryMenu ul {
+    list-style: none;
+    display: none;
+}
+
+#categoryMenu ul li {
+    opacity: 0;
+}
+
+#categoryMenu.open {
+    width: 60%;
+    background-color: #c0c0c0;
+    opacity: 0.95;
+}
+
+#categoryMenu.open ul {
+    margin: 0;
+    padding: 0px 40px 60px 80px;
+    display: block;
+    font-size: 2em;
+}
+
+#categoryMenu.open li {
+    opacity: 1;
+}
+
+#menuList .menu-item {
+    overflow: auto;
+    padding-bottom: 10px;
+}
+
+#menuList .menu-item img {
+    padding-left: 2%;
+    width: 8%;
+    float: left;
+}
+
+#menuList .menu-item table {
+    width: 80%;
+    padding-left: 2%;
+    text-align: center;
+}
+
+#menuList .menu-item-price {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+#menuList .menu-item-quantity {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-item-quantity-text {
+    width: 30px;
+    height: 30px;
+    font-size: 16pt;
+    text-align: center;
+    font-family: "Raleway", sans-serif;
+    vertical-align: middle;
+}
+
+.menu-subtract-button, .menu-add-button {
+    font-size: 16pt;
+    font-family: "Playfair Display", sans-serif;
+    height: 30px;
+    width: 30px;
+    border: 1px solid red;
+    color: red;
+    border-radius: 15px;
+    display: inline-block;
+    position: relative;
+    margin: 2px 6px 0px 6px;
+    box-shadow: 0px 2px #999;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+}
+
+.menu-subtract-button:hover, .menu-add-button:hover {
+    background-color: #ffefe0;
+}
+
+.menu-subtract-button:active, .menu-add-button:active {
+    background-color: #edd;
+    box-shadow: 0px 1px #666;
+    transform: translateY(1px);
+    -ms-transform: translateY(1px);
+    -webkit-transform: translateY(1px);
+}
+
+.menu-subtract-button div, .menu-add-button div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
 }
