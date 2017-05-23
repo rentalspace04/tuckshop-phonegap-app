@@ -233,3 +233,18 @@ table#cartView, table#historyView {
     justify-content: space-around;
     align-items: center;
 }
+
+#placeOrderForm {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    padding: 5%;
+}
+
+.inputPair {
+    padding-bottom: 20px;
+}
+
+.inputPair label {
+    padding-left: 10px;
+}

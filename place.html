@@ -3,20 +3,40 @@
     <head>
         <meta charset="utf-8">
         <title>Tuckr</title>
+        <link type="text/css" rel="stylesheet" href="style/jquery-ui.min.css" />
         <link type="text/css" rel="stylesheet" href="style/main.css" />
         <link type="text/css" rel="stylesheet" href="style/form.css" />
         <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32">
         <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16">
         <script src="js/res/jquery-3.2.1.min.js"></script>
+        <script src="js/res/jquery-ui.min.js"></script>
         <script src="js/res/prototype.js"></script>
         <script src="js/common/classes.js"></script>
+        <script src="js/pages/place.js"></script>
     </head>
     <body>
         <div id="contentBox">
             <h1>Tuckr</h1>
             <!-- PAGE CONTENT HERE -->
-
+            <h2>Confirm Order</h2>
+            <form id="placeOrderForm">
+                <div class="inputPair">
+                    <label for="paymentType">Payment Type: </label>
+                    <select name="paymentType", id="paymentType">
+                        <option>Paypal</option>
+                        <option>Credit</option>
+                        <option>Cash (on pickup)</option>
+                    </select>
+                </div>
+                <div class="inputPair">
+                    <label for="pickupTime">Pickup Time: </label>
+                    <select name="pickupTime", id="pickupTime">
+                        <option>Morning Tea</option>
+                        <option>Lunch</option>
+                    </select>
+                </div>
+            </form>
         </div>
     </body>
 </html>
