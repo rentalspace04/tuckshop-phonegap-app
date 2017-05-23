@@ -201,3 +201,17 @@ form#loginForm .button {
     text-align: center;
     vertical-align: middle;
 }
+
+table#cartView {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+#cartButtons {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
