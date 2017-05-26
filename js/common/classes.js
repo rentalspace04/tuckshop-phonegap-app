@@ -146,22 +146,55 @@ var Storage = Class.create({
 });
 
 var TuckshopData = Class.create({
-    initialize: function() {
+    initialize: function(token = null, userID = null) {
         this.baseURL = "https://infs3202-zwhqf.uqcloud.net";
+        this.token = token;
+        this.userID = userID;
     },
     get: function(url, params = {}) {
+        if (this.token && this.userID) {
+            setParamater(params, "token", this.token);
+            setParamater(params, "userID", this.userID);
+        }
         return new Promise((resolve, reject) => {
             new Ajax.Request(this.baseURL + url, {
                 method: "post",
                 parameters: params,
                 onSuccess: (resp) => {
-                    if (resp.json) {
-                        resolve(resp.json);
+                    if (resp.responseJSON) {
+                        resolve(resp.responseJSON);
                     }
                     reject(resp.responseText);
+                },
+                onFailure: (resp) => {
+                    reject(resp);
                 }
             });
-            reject(new Error("No successful response posting to '" + url + "'"));
+        });
+    },
+    getItem: function(itemID) {
+        return this.get("/mobile/getItem.php", {
+            "itemID": itemID,
+        });
+    },
+    getCategories: function() {
+        return this.get("/mobile/getCategories.php", {});
+    },
+    getMenu: function(categoryID) {
+        return this.get("/mobile/getMenu.php", {
+            "categoryID": categoryID,
+        });
+    },
+    logIn: function(email, password) {
+        return this.get("/mobile/getToken.php", {
+            "email": email,
+            "password": password,
+        });
+    },
+    getHistory: function() {
+        return this.get("/mobile/getToken.php", {
+            "email": email,
+            "password": password,
         });
     }
 });
@@ -235,4 +268,11 @@ function cartFromJSON(json, isString = false) {
         }
         throw Error("Invalid cart format");
     });
+}
+
+// Sets the an attribute of an object if it isn't already set
+function setParamater(params, name, value) {
+    if (!params.hasOwnProperty(name)) {
+        params[name] = value;
+    }
 }
