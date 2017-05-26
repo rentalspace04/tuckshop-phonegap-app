@@ -1,31 +1,4 @@
-function arraysSame(a, b) {
-    if (a == b) return true;
-    if (a == null || b == null) return true;
-    if (a.length != b.length) return false;
-    var c = $A(a);
-    var d = $A(b);
-    c.each(function (elem, i) {
-        if (elem != d[i]) {
-            return false;
-        }
-    });
-    return true;
-}
 
-/*
-*    Parses a JSON object and returns the array of menu items it
-*    represents
-*/
-function jsonToMenu(json) {
-    var itemsOut = new Array();
-
-    json.items.each(function(i) {
-        var item = new Item(i.itemID, i.name, i.description, i.availability, i.price, i.image, i.categories);
-        itemsOut.push(item);
-    });
-
-    return itemsOut;
-}
 
 /*
 *     Parses a JSON object and returns the cart object it represents

@@ -46,6 +46,9 @@ var Cart = Class.create({
     has: function(itemID) {
         return this.items.keys().indexOf(itemID) >= 0;
     },
+    json: function() {
+        return JSON.stringify(this);
+    },
 });
 
 var Item = Class.create({
@@ -84,10 +87,20 @@ var Item = Class.create({
 
 var Storage = Class.create({
     initialize: function() {
-        this.loggedIn = localStorage.getItem("loggedIn") != null;
-        if (this.initialized) {
+        this.loggedIn = localStorage.getItem("loggedIn");
+        if (this.loggedIn) {
             this.userID = localStorage.getItem("userID");
             this.token = localStorage.getItem("token");
+            if (localStorage.getItem("ordering")) {
+                cartJSON = localStorage.getItem("cart");
+                cartPromise = cartFromJSON(cartJSON, isString(cartJSON));
+                cartPromise.then((cart) => {
+                    this.cart = cart;
+                    this.ordering = true;
+                }).catch(() => {
+                    this.ordering = false;
+                });
+            }
         }
     },
     isLoggedIn: function() {
@@ -99,18 +112,127 @@ var Storage = Class.create({
     getToken: function() {
         return this.token;
     },
-    updateStorage: function() {
+    save: function() {
         localStorage.setItem("loggedIn", this.loggedIn);
-        localStorage.setItem("userID", this.userID);
-        localStorage.setItem("token", this.token);
+        if (this.loggedIn) {
+            localStorage.setItem("userID", this.userID);
+            localStorage.setItem("token", this.token);
+            if (this.ordering) {
+                localStorage.setItem("cart", this.cart);
+                localStorage.setItem("ordering", this.ordering);
+            }
+        }
     },
     logIn: function(userID, token) {
         this.userID = userID;
         this.token = token;
         this.loggedIn = true;
-        this.updateStorage();
+        this.save();
     },
     logOut: function() {
         localStorage.clear();
+    },
+    clearCart: function() {
+        localStorage.removeItem("cart");
+        localStorage.removeItem("ordering");
+        this.cart = null;
+        this.ordering = false;
+    },
+    updateCart: function(cart) {
+        this.cart = cart;
+        this.ordering = true;
+        this.save();
     }
 });
+
+var TuckshopData = Class.create({
+    initialize: function() {
+        this.baseURL = "https://infs3202-zwhqf.uqcloud.net";
+    },
+    get: function(url, params = {}) {
+        return new Promise((resolve, reject) => {
+            new Ajax.Request(this.baseURL + url, {
+                method: "post",
+                parameters: params,
+                onSuccess: (resp) => {
+                    if (resp.json) {
+                        resolve(resp.json);
+                    }
+                    reject(resp.responseText);
+                }
+            });
+            reject(new Error("No successful response posting to '" + url + "'"));
+        });
+    }
+});
+
+/**
+*
+*        HELPER METHODS
+*
+*/
+
+function arraysSame(a, b) {
+    if (a == b) return true;
+    if (a == null || b == null) return true;
+    if (a.length != b.length) return false;
+    var c = $A(a);
+    var d = $A(b);
+    c.each(function (elem, i) {
+        if (elem != d[i]) {
+            return false;
+        }
+    });
+    return true;
+}
+
+// Checks if obj is a string
+function isString(obj) {
+    return typeof obj === "string" || obj instanceof String;
+}
+
+/*
+*    Parses a JSON object and returns the array of menu items it
+*    represents
+*/
+function jsonToMenu(json) {
+    var itemsOut = new $A();
+
+    json.items.each(function(i) {
+        var item = new Item(i.itemID, i.name, i.description, i.availability, i.price, i.image, i.categories);
+        itemsOut.push(item);
+    });
+
+    return itemsOut;
+}
+
+// Returns a promise that resolves to a cart item from the given json
+// if the json is a valid cart
+function cartFromJSON(json, isString = false) {
+    // parse from string, if it's still a string, otherwise just return it
+    var promise = new Promise((resolve, reject) => {
+        if (isString) {
+            resolve(JSON.parse(json));
+        }
+        resolve(json);
+    });
+    return promise.then((json) => {
+        if (json.hasOwnProperty("items")) {
+            var cart = new Cart();
+            var map = $H(json.items);
+            // Check that all item IDs are at least 0 and all values
+            // are positive. Also, check that cart doesn't already have
+            // entry for this item
+            map.each((pair) => {
+                if (Number.parseInt(pair.key) < 0
+                    || Number.parseInt(pair.value) < 1
+                    || cart.has(pair.key)) {
+                    throw new Error("Invalid cart format");
+                }
+                cart.add(pair.key, pair.value);
+            });
+            return cart;
+        }
+        throw Error("Invalid cart format");
+    });
+}
