@@ -164,10 +164,10 @@ var TuckshopData = Class.create({
                     if (resp.responseJSON) {
                         resolve(resp.responseJSON);
                     }
-                    reject(resp.responseText);
+                    reject(new Error(resp.responseText));
                 },
                 onFailure: (resp) => {
-                    reject(resp);
+                    reject(new Error(resp.responseText));
                 }
             });
         });
@@ -268,6 +268,16 @@ function cartFromJSON(json, isString = false) {
         }
         throw Error("Invalid cart format");
     });
+}
+
+function jsonHasProperties(json, props) {
+    var out = true;
+    var propsArr = $A(props);
+    propsArr.each((elem) => {
+        console.log(elem);
+        out = out & json.hasOwnProperty(elem);
+    });
+    return out;
 }
 
 // Sets the an attribute of an object if it isn't already set

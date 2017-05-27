@@ -248,3 +248,6 @@ table#cartView, table#historyView {
 .inputPair label {
     padding-left: 10px;
 }
+#errorMessage {
+    display: none;
+}
