@@ -49,6 +49,13 @@ var Cart = Class.create({
     json: function() {
         return JSON.stringify(this);
     },
+    isEmpty: function() {
+        // It's empty iff there are 0 items in cart
+        return this.items.keys().length == 0;
+    },
+    each: function(action) {
+        this.items.each(action);
+    }
 });
 
 var Item = Class.create({
@@ -69,38 +76,79 @@ var Item = Class.create({
     *    Puts a Menu Item section for this item into the menu list
     */
     asHTML: function() {
-        var itemHTML = "<div class=\"menu-item\"\n>";
-        itemHTML += "<img src=\"" + this.image + "\" />\n";
-        itemHTML += "<table class=\"menu-item-content\">\n";
-        itemHTML += "<tbody>\n<tr>\n<td>\n";
-        itemHTML += this.name + "\n";
-        itemHTML += "</td>\n<td>\n";
-        itemHTML += "<p class=\"menu-item-price\">\$" + this.price.toFixed(2) + "</p>\n";
-        itemHTML += "</td>\n</tr>\n<tr>\n<td>\n";
-        itemHTML += "<p class=\"menu-item-desc\">" + this.desc +"</p>\n";
-        itemHTML += "</td>\n<td>\n";
-        itemHTML += "<div class=\"menu-item-quantity\" id=\"item-quantity-" + this.itemID + "\">\n";
-        itemHTML += "<a class=\"menu-subtract-button\"><div>-</div></a>\n";
-        itemHTML += "<input type=\"text\" class=\"menu-item-quantity-text\" disabled value=\"\" />\n";
-        itemHTML += "<a class=\"menu-add-button\"><div>+</div></a>\n";
-        itemHTML += "</div>\n</td>\n</tr>\n</tbody>\n</table>\n</div>\n";
-        return itemHTML;
+        return (($) => {
+            return $("<div>").addClass("menu-item").attr("data-item-id", this.itemID)
+            .append(
+                $("<img>").attr("src", this.image),
+                $("<table>").addClass("menu-item-content")
+                .append(
+                    $("<tbody>")
+                    .append(
+                        $("<tr>").append(
+                            $("<td>").text(this.name),
+                            $("<td>").append(
+                                $("<p>").addClass("menu-item-price")
+                                    .text("$" + this.price.toFixed(2))
+                            )
+                        )
+                    ).append(
+                        $("<tr>").append(
+                            $("<td>").addClass("menu-item-desc").text(this.desc),
+                            $("<td>").append(
+                                $("<div>").addClass("menu-item-quantity")
+                                .append(
+                                    $("<a>").addClass("menu-subtract-button")
+                                    .append($("<div>").text("-")),
+                                    $("<input>").attr({
+                                        "type": "text",
+                                        "disabled": true,
+                                        "value": ""
+                                    }).addClass("menu-item-quantity-text"),
+                                    $("<a>").addClass("menu-add-button")
+                                    .append($("<div>").text("+"))
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        })(jQuery);
+
+        // var itemHTML = "<div class=\"menu-item\"\n>";
+        // itemHTML += "<img src=\"" + this.image + "\" />\n";
+        // itemHTML += "<table class=\"menu-item-content\">\n";
+        // itemHTML += "<tbody>\n<tr>\n<td>\n";
+        // itemHTML += this.name + "\n";
+        // itemHTML += "</td>\n<td>\n";
+        // itemHTML += "<p class=\"menu-item-price\">\$" + this.price.toFixed(2) + "</p>\n";
+        // itemHTML += "</td>\n</tr>\n<tr>\n<td>\n";
+        // itemHTML += "<p class=\"menu-item-desc\">" + this.desc +"</p>\n";
+        // itemHTML += "</td>\n<td>\n";
+        // itemHTML += "<div class=\"menu-item-quantity\" id=\"item-quantity-" + this.itemID + "\">\n";
+        // itemHTML += "<a class=\"menu-subtract-button\"><div>-</div></a>\n";
+        // itemHTML += "<input type=\"text\" class=\"menu-item-quantity-text\" disabled value=\"\" />\n";
+        // itemHTML += "<a class=\"menu-add-button\"><div>+</div></a>\n";
+        // itemHTML += "</div>\n</td>\n</tr>\n</tbody>\n</table>\n</div>\n";
+        // return itemHTML;
     }
 });
 
 var Storage = Class.create({
     initialize: function() {
         this.loggedIn = localStorage.getItem("loggedIn");
+        this.ordering = false;
         if (this.loggedIn) {
             this.userID = localStorage.getItem("userID");
             this.token = localStorage.getItem("token");
             if (localStorage.getItem("ordering")) {
                 cartJSON = localStorage.getItem("cart");
-                cartPromise = cartFromJSON(cartJSON, isString(cartJSON));
-                cartPromise.then((cart) => {
+                cartFromJSON(cartJSON, isString(cartJSON))
+                .then((cart) => {
+                    console.log("storage got cart - ", cart);
                     this.cart = cart;
                     this.ordering = true;
-                }).catch(() => {
+                }).catch((err) => {
+                    console.warn(err);
                     this.ordering = false;
                 });
             }
@@ -121,7 +169,7 @@ var Storage = Class.create({
             localStorage.setItem("userID", this.userID);
             localStorage.setItem("token", this.token);
             if (this.ordering) {
-                localStorage.setItem("cart", this.cart);
+                localStorage.setItem("cart", this.cart.json());
                 localStorage.setItem("ordering", this.ordering);
             }
         }
@@ -145,6 +193,12 @@ var Storage = Class.create({
         this.cart = cart;
         this.ordering = true;
         this.save();
+    },
+    isOrdering: function() {
+        return this.ordering;
+    },
+    getCart: function() {
+        return this.cart;
     }
 });
 
@@ -242,11 +296,15 @@ function jsonToMenu(json) {
     var itemsOut = new $A();
 
     json.items.each(function(i) {
-        var item = new Item(i.itemID, i.name, i.description, i.availability, parseFloat(i.price), i.image, i.categories);
+        var item = jsonToItem(i);
         itemsOut.push(item);
     });
 
     return itemsOut;
+}
+
+function jsonToItem(i) {
+    return new Item(i.itemID, i.name, i.description, i.availability, parseFloat(i.price), i.image, i.categories);
 }
 
 // Returns a promise that resolves to a cart item from the given json
@@ -263,10 +321,12 @@ function cartFromJSON(json, isString = false) {
         if (json.hasOwnProperty("items")) {
             var cart = new Cart();
             var map = $H(json.items);
+            console.log("got map - ", map);
             // Check that all item IDs are at least 0 and all values
             // are positive. Also, check that cart doesn't already have
             // entry for this item
             map.each((pair) => {
+                console.log("got pair - ", pair);
                 if (Number.parseInt(pair.key) < 0
                     || Number.parseInt(pair.value) < 1
                     || cart.has(pair.key)) {
@@ -302,14 +362,41 @@ function setParamater(params, name, value) {
 // Returns a promise, so you can begin page behaviour after user is confirmed
 // to be logged in
 function confirmUserIsLoggedIn(redirectTo = "index.html") {
-    var storage = new Storage();
     if (!storage.isLoggedIn()) {
         performLogOut(redirectTo);
     }
 }
 
 function performLogOut(redirectTo = "index.html") {
-    var storage = new Storage();
     storage.logOut(); // Clear all storage just in case
     window.location.href = redirectTo;
 }
+
+function getCartFromStorage() {
+    if (!storage.isOrdering()) {
+        var cart = new Cart();
+        storage.updateCart(cart);
+    }
+    return storage.getCart();
+}
+
+function makeCartTable(cart) {
+    return (function($){
+        if (cart.isEmpty()) {
+            return $("<p>").text("You don't have anything in your cart!");
+        } else {
+            var table = $("<table>").attr("id", "cartView");
+
+
+            return table;
+        }
+    })(jQuery);
+}
+
+function itemCartView(item) {
+    return (function($){
+        return $("<tr>").append();
+    })(jQuery);
+}
+
+storage = new Storage();

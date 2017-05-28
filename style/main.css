@@ -104,7 +104,7 @@ form#loginForm .button {
     margin: 0;
     padding: 0px 40px 60px 80px;
     display: block;
-    font-size: 2em;
+    font-size: 1.4em;
 }
 
 #categoryMenu .menu a.navigation {
@@ -112,7 +112,7 @@ form#loginForm .button {
     text-decoration: none;
     padding: 0px 40px 10px 80px;
     color: #000;
-    font-size: 2em;
+    font-size: 1.4em;
 }
 
 #categoryMenu .menu hr {
