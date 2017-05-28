@@ -73,7 +73,7 @@
                 .then(validateLoginJSON)
                 .then((json) => {
                     // Store the log in details and go to home page
-                    storage.logIn(json.userID, json.token);
+                    storage.logIn(json.userID, encodeURIComponent(json.token));
                     setTimeout(() => {
                         window.location.href = "home.html";
                     }, 500);

@@ -92,7 +92,7 @@ form#loginForm .button {
 }
 
 #categoryMenu img {
-    width: 75px;
+    width: 50px;
 }
 
 #categoryMenu .menu {
@@ -126,7 +126,7 @@ form#loginForm .button {
 }
 
 #categoryMenu.open {
-    width: 60%;
+    min-width: 60%;
     background-color: #c0c0c0;
     opacity: 0.95;
 }
@@ -153,12 +153,17 @@ form#loginForm .button {
 #menuList .menu-item table {
     width: 80%;
     padding-left: 2%;
-    text-align: center;
+    text-align: left;
+}
+
+#menuList .menu-item table td:last-child {
+    width: 1px;
 }
 
 #menuList .menu-item-price {
     font-weight: bold;
     font-size: 1.5em;
+    text-align: center;
 }
 
 #menuList .menu-item-quantity {

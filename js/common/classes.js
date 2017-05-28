@@ -58,6 +58,9 @@ var Item = Class.create({
         this.desc = desc;
         this.stock = stock;
         this.price = price;
+        if (image[0] == "/") {
+            image = "https://infs3202-zwhqf.uqcloud.net" + image;
+        }
         this.image = image;
         this.categories = categories;
     },
@@ -146,7 +149,7 @@ var Storage = Class.create({
 });
 
 var TuckshopData = Class.create({
-    initialize: function(token = null, userID = null) {
+    initialize: function(userID = null, token = null) {
         this.baseURL = "https://infs3202-zwhqf.uqcloud.net";
         this.token = token;
         this.userID = userID;
@@ -199,6 +202,13 @@ var TuckshopData = Class.create({
     }
 });
 
+var AuthError = Class.create({
+    initialize: function (message, json = {}) {
+        this.message = message;
+        this.json = json;
+    },
+});
+
 /**
 *
 *        HELPER METHODS
@@ -232,7 +242,7 @@ function jsonToMenu(json) {
     var itemsOut = new $A();
 
     json.items.each(function(i) {
-        var item = new Item(i.itemID, i.name, i.description, i.availability, i.price, i.image, i.categories);
+        var item = new Item(i.itemID, i.name, i.description, i.availability, parseFloat(i.price), i.image, i.categories);
         itemsOut.push(item);
     });
 
@@ -285,4 +295,21 @@ function setParamater(params, name, value) {
     if (!params.hasOwnProperty(name)) {
         params[name] = value;
     }
+}
+
+// Confirms that the user is logged in
+// If not, redirects to index.html (or specified URL)
+// Returns a promise, so you can begin page behaviour after user is confirmed
+// to be logged in
+function confirmUserIsLoggedIn(redirectTo = "index.html") {
+    var storage = new Storage();
+    if (!storage.isLoggedIn()) {
+        performLogOut(redirectTo);
+    }
+}
+
+function performLogOut(redirectTo = "index.html") {
+    var storage = new Storage();
+    storage.logOut(); // Clear all storage just in case
+    window.location.href = redirectTo;
 }
