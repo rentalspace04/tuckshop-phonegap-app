@@ -380,23 +380,13 @@ function getCartFromStorage() {
     return storage.getCart();
 }
 
-function makeCartTable(cart) {
-    return (function($){
-        if (cart.isEmpty()) {
-            return $("<p>").text("You don't have anything in your cart!");
-        } else {
-            var table = $("<table>").attr("id", "cartView");
-
-
-            return table;
-        }
-    })(jQuery);
-}
-
-function itemCartView(item) {
-    return (function($){
-        return $("<tr>").append();
-    })(jQuery);
+function handlePromiseError(err) {
+    if (err instanceof AuthError) {
+        performLogOut();
+    } else {
+        console.log("Error caught - not an auth error.");
+        console.warn(err);
+    }
 }
 
 storage = new Storage();

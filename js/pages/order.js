@@ -52,15 +52,6 @@
         );
     }
 
-    function handleError(err) {
-        if (err instanceof AuthError) {
-            performLogOut();
-        } else {
-            console.log("Error caught - not an auth error.");
-            console.warn(err);
-        }
-    }
-
     function handleCategoryClicked(e) {
         var catID = $(e.target).attr("data-category-id");
         loadMenu(catID);
@@ -78,7 +69,7 @@
         td.getCategories()
         .then(validateCategoriesJSON)
         .then(displayCategories)
-        .catch(handleError);
+        .catch(handlePromiseError);
     }
 
     function loadMenu(categoryID) {
@@ -89,7 +80,7 @@
         .then(displayMenu)
         .then(closeCategoryMenu)
         .then(updateQuantities)
-        .catch(handleError);
+        .catch(handlePromiseError);
     }
 
     function closeCategoryMenu(e) {
